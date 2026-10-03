@@ -1,0 +1,11 @@
+{
+  "policy_number": "POL-1003",
+  "claimant_name": "Mehmet Kaya",
+  "claim_amount": 60000,
+  "incident_date": "2026-05-01",
+  "document_texts": [
+    "Hasar tespit tutanagi: Aracin sadece on tamponunda kucuk bir cizik var, baska hasar yok.",
+    "Onarim tahmini: Tum arac kaporta degisimi ve motor revizyonu icin 60000 TL.",
+    "Olay aciklamasi: Once 1 Mayis'ta hafif bir carpisma dedi, sonra ifadesinde 15 Nisan'da agir bir kaza oldugunu soyledi. Tarihler ve hasar boyutu tutarsiz."
+  ]
+}

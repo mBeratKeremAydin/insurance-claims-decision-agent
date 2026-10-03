@@ -1,0 +1,165 @@
+{
+    "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+    "$id": "entry-points.json",
+    "entryPoints": [
+        {
+            "filePath": "agent",
+            "uniqueId": "5adfecfa-a31e-4e63-994c-0afc06c53d13",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "policy_number": {
+                        "title": "Policy Number",
+                        "type": "string"
+                    },
+                    "claimant_name": {
+                        "title": "Claimant Name",
+                        "type": "string"
+                    },
+                    "claim_amount": {
+                        "title": "Claim Amount",
+                        "type": "number"
+                    },
+                    "incident_date": {
+                        "title": "Incident Date",
+                        "type": "string"
+                    },
+                    "document_texts": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Document Texts",
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "policy_number",
+                    "claimant_name",
+                    "claim_amount",
+                    "incident_date"
+                ]
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "decision": {
+                        "enum": [
+                            "approve",
+                            "reject",
+                            "manual_review"
+                        ],
+                        "title": "Decision",
+                        "type": "string"
+                    },
+                    "rationale": {
+                        "title": "Rationale",
+                        "type": "string"
+                    },
+                    "policy_valid": {
+                        "title": "Policy Valid",
+                        "type": "boolean"
+                    },
+                    "is_duplicate": {
+                        "title": "Is Duplicate",
+                        "type": "boolean"
+                    },
+                    "fraud_risk_score": {
+                        "title": "Fraud Risk Score",
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "decision",
+                    "rationale",
+                    "policy_valid",
+                    "is_duplicate",
+                    "fraud_risk_score"
+                ]
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "__start__",
+                        "name": "__start__",
+                        "type": "__start__",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "check_policy",
+                        "name": "check_policy",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "check_duplicate",
+                        "name": "check_duplicate",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "analyze_documents",
+                        "name": "analyze_documents",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "recommend_decision",
+                        "name": "recommend_decision",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "__end__",
+                        "name": "__end__",
+                        "type": "__end__",
+                        "subgraph": null,
+                        "metadata": {}
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "__start__",
+                        "target": "check_policy",
+                        "label": null
+                    },
+                    {
+                        "source": "analyze_documents",
+                        "target": "recommend_decision",
+                        "label": null
+                    },
+                    {
+                        "source": "check_duplicate",
+                        "target": "analyze_documents",
+                        "label": null
+                    },
+                    {
+                        "source": "check_duplicate",
+                        "target": "recommend_decision",
+                        "label": null
+                    },
+                    {
+                        "source": "check_policy",
+                        "target": "check_duplicate",
+                        "label": null
+                    },
+                    {
+                        "source": "check_policy",
+                        "target": "recommend_decision",
+                        "label": null
+                    },
+                    {
+                        "source": "recommend_decision",
+                        "target": "__end__",
+                        "label": null
+                    }
+                ]
+            }
+        }
+    ]
+}

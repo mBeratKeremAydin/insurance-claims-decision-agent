@@ -1,0 +1,112 @@
+{
+  "version": "1.0",
+  "id": "smoke-test",
+  "name": "Sigorta Hasar Agent - Smoke Test",
+  "description": "Covers the primary happy path plus the three required guardrail scenarios: invalid policy, duplicate claim, missing documents, and fraud suspicion.",
+  "evaluatorRefs": ["DecisionExactMatch", "TrajectoryCheck"],
+  "evaluations": [
+    {
+      "id": "test-1-happy-path",
+      "name": "Valid policy, complete documents, no duplicate -> approve",
+      "inputs": {
+        "policy_number": "POL-1003",
+        "claimant_name": "Mehmet Kaya",
+        "claim_amount": 15000,
+        "incident_date": "2026-03-01",
+        "document_texts": [
+          "Hasar tespit tutanagi: Aracin on tamponu carpisma sonucu hasar gormustur.",
+          "Onarim tahmini: Tampon degisimi ve boya islemi icin 15000 TL tahmini maliyet.",
+          "Olay aciklamasi: 1 Mart 2026 tarihinde park halindeyken baska bir arac tarafindan carpilmistir."
+        ]
+      },
+      "evaluationCriterias": {
+        "DecisionExactMatch": { "expectedOutput": { "decision": "approve" } },
+        "TrajectoryCheck": {
+          "expectedAgentBehavior": "Policy is valid, no duplicate, documents are complete and consistent -> agent runs check_policy, check_duplicate, analyze_documents, then recommends approve."
+        }
+      }
+    },
+    {
+      "id": "test-2-invalid-policy",
+      "name": "Expired policy -> reject, short-circuits duplicate/document checks",
+      "inputs": {
+        "policy_number": "POL-1002",
+        "claimant_name": "Elif Demir",
+        "claim_amount": 5000,
+        "incident_date": "2026-03-01",
+        "document_texts": [
+          "Hasar tespit tutanagi: Cam kirilmasi.",
+          "Onarim tahmini: 5000 TL.",
+          "Olay aciklamasi: Tas sicramasi sonucu on cam kirildi."
+        ]
+      },
+      "evaluationCriterias": {
+        "DecisionExactMatch": { "expectedOutput": { "decision": "reject" } },
+        "TrajectoryCheck": {
+          "expectedAgentBehavior": "Policy status is Expired -> agent runs check_policy, finds it invalid, and jumps straight to recommend_decision with reject, skipping check_duplicate and analyze_documents."
+        }
+      }
+    },
+    {
+      "id": "test-3-duplicate-claim",
+      "name": "Same policy and incident date as an existing claim -> manual_review",
+      "inputs": {
+        "policy_number": "POL-1001",
+        "claimant_name": "Ahmet Yilmaz",
+        "claim_amount": 8000,
+        "incident_date": "2026-02-10",
+        "document_texts": [
+          "Hasar tespit tutanagi: Arka tampon hasari.",
+          "Onarim tahmini: 8000 TL.",
+          "Olay aciklamasi: 10 Subat 2026 tarihinde otoparkta carpisma oldu."
+        ]
+      },
+      "evaluationCriterias": {
+        "DecisionExactMatch": { "expectedOutput": { "decision": "manual_review" } },
+        "TrajectoryCheck": {
+          "expectedAgentBehavior": "Policy is valid, but a claim with the same policy number and incident date already exists -> agent runs check_policy, check_duplicate, detects the duplicate, and jumps straight to recommend_decision with manual_review, skipping analyze_documents."
+        }
+      }
+    },
+    {
+      "id": "test-4-missing-documents",
+      "name": "Only 1 of 3 required document types provided -> manual_review",
+      "inputs": {
+        "policy_number": "POL-1001",
+        "claimant_name": "Ahmet Yilmaz",
+        "claim_amount": 6000,
+        "incident_date": "2026-04-15",
+        "document_texts": [
+          "Olay aciklamasi: 15 Nisan 2026 tarihinde yagmurlu havada kaymayla kucuk bir kaza oldu."
+        ]
+      },
+      "evaluationCriterias": {
+        "DecisionExactMatch": { "expectedOutput": { "decision": "manual_review" } },
+        "TrajectoryCheck": {
+          "expectedAgentBehavior": "Policy is valid and not a duplicate -> agent runs all four steps; analyze_documents detects that 'hasar tespit tutanagi' and 'onarim tahmini' are missing, so recommend_decision returns manual_review citing missing documents."
+        }
+      }
+    },
+    {
+      "id": "test-5-fraud-suspect",
+      "name": "Inconsistent dates and damage description -> manual_review",
+      "inputs": {
+        "policy_number": "POL-1003",
+        "claimant_name": "Mehmet Kaya",
+        "claim_amount": 60000,
+        "incident_date": "2026-05-01",
+        "document_texts": [
+          "Hasar tespit tutanagi: Aracin sadece on tamponunda kucuk bir cizik var, baska hasar yok.",
+          "Onarim tahmini: Tum arac kaporta degisimi ve motor revizyonu icin 60000 TL.",
+          "Olay aciklamasi: Once 1 Mayis'ta hafif bir carpisma dedi, sonra ifadesinde 15 Nisan'da agir bir kaza oldugunu soyledi. Tarihler ve hasar boyutu tutarsiz."
+        ]
+      },
+      "evaluationCriterias": {
+        "DecisionExactMatch": { "expectedOutput": { "decision": "manual_review" } },
+        "TrajectoryCheck": {
+          "expectedAgentBehavior": "Policy is valid and not a duplicate -> agent runs all four steps; analyze_documents flags a high fraud risk score due to inconsistent dates and mismatched damage severity, so recommend_decision returns manual_review citing fraud suspicion."
+        }
+      }
+    }
+  ]
+}

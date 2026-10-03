@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "id": "DecisionExactMatch",
+  "evaluatorTypeId": "uipath-exact-match",
+  "description": "Checks that the agent's final 'decision' field exactly matches the expected outcome (approve / reject / manual_review) for the scenario.",
+  "evaluatorConfig": {
+    "name": "DecisionExactMatch",
+    "targetOutputKey": "decision",
+    "defaultEvaluationCriteria": {
+      "expectedOutput": { "decision": "approve" }
+    }
+  }
+}

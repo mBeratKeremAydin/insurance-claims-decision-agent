@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "id": "TrajectoryCheck",
+  "evaluatorTypeId": "uipath-llm-judge-trajectory-similarity",
+  "description": "Checks that the agent followed the correct step sequence for the scenario: policy check first, then (if valid) duplicate check, then (if not a duplicate) document analysis, before recommending a decision.",
+  "evaluatorConfig": {
+    "name": "TrajectoryCheck",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "defaultEvaluationCriteria": {
+      "expectedAgentBehavior": "The agent checks the policy first. If the policy is invalid (not found, inactive, out of coverage period, or amount exceeds coverage), it skips duplicate and document checks and goes straight to a reject decision. If the policy is valid, it checks for a duplicate claim; if a duplicate is found, it skips document analysis and returns manual_review. Otherwise it analyzes the submitted documents before recommending a final decision."
+    }
+  }
+}

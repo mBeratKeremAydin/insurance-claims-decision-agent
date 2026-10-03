@@ -1,0 +1,11 @@
+{
+  "policy_number": "POL-1001",
+  "claimant_name": "Ahmet Yilmaz",
+  "claim_amount": 8000,
+  "incident_date": "2026-02-10",
+  "document_texts": [
+    "Hasar tespit tutanagi: Arka tampon hasari.",
+    "Onarim tahmini: 8000 TL.",
+    "Olay aciklamasi: 10 Subat 2026 tarihinde otoparkta carpisma oldu."
+  ]
+}

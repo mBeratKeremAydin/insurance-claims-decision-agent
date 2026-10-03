@@ -1,0 +1,11 @@
+{
+  "policy_number": "POL-1003",
+  "claimant_name": "Mehmet Kaya",
+  "claim_amount": 15000,
+  "incident_date": "2026-03-01",
+  "document_texts": [
+    "Hasar tespit tutanagi: Aracin on tamponu carpisma sonucu hasar gormustur.",
+    "Onarim tahmini: Tampon degisimi ve boya islemi icin 15000 TL tahmini maliyet.",
+    "Olay aciklamasi: 1 Mart 2026 tarihinde park halindeyken baska bir arac tarafindan carpilmistir."
+  ]
+}
